@@ -1,59 +1,59 @@
+# main.py
 import streamlit as st
+import pyrebase
+from private.firebase_config import firebaseConfig  # Import your config
 
-st.set_page_config(page_title="page title", layout="wide")
+# Initialize Pyrebase
+firebase = pyrebase.initialize_app(firebaseConfig)
+auth = firebase.auth()
 
-# Sidebar - User Profile & Navigation
-with st.sidebar:
-    st.title("page title")
-    st.markdown("### Καλωσόρισες, Μαθητή!")
-    st.markdown("#### Επίπεδο: Αρχάριος 🐣")
-    st.markdown("---")
-    section = st.radio("📚 Επιλογή Ενότητας:", [
-        "Εισαγωγή στην Python",
-        "Μεταβλητές & Τύποι",
-        "If Statements",
-        "Loops",
-        "Συναρτήσεις",
-        "Ασκήσεις Επανάληψης"
-    ])
-    st.markdown("---")
-    st.markdown("🧠 Πρόοδος: 45%")
+# Session state to track login status
+if 'user' not in st.session_state:
+    st.session_state.user = None
 
-# Main Section - Learning Flow
-st.title(f"📘 {section}")
-st.markdown("#### Βήμα 1: Διάβασε το υλικό")
-
-# Section Content
-if section == "If Statements":
-    st.markdown("""
-    Οι **if δηλώσεις** επιτρέπουν στον κώδικά σου να παίρνει αποφάσεις!
-
-    ```python
-    x = 10
-    if x > 5:
-        print("Το x είναι μεγαλύτερο από 5!")
-    ```
-    """)
-
-    # Practice Quiz
-    st.markdown("#### Βήμα 2: Quiz")
-    q1 = st.radio("Τι θα εμφανιστεί;", ["Τίποτα", "Το x είναι μεγαλύτερο από 5!", "Λάθος"])
-    if st.button("✅ Έλεγχος"):
-        if q1 == "Το x είναι μεγαλύτερο από 5!":
-            st.success("Μπράβο! Σωστά! 🎉")
-        else:
-            st.error("Όχι ακριβώς! Δοκίμασε ξανά ή ζήτα βοήθεια από τον πράκτορα.")
-
-    # Code Practice
-    st.markdown("#### Βήμα 3: Γράψε Κώδικα")
-    code = st.text_area("📝 Πληκτρολόγησε τον δικό σου κώδικα:", height=200)
-    if st.button("🚀 Εκτέλεση"):
-        with st.spinner("Εκτελείται..."):
+# Auth UI
+def show_login():
+    st.title("🔑 Login to Python Learning App")
+    
+    tab_login, tab_register = st.tabs(["Login", "Register"])
+    
+    with tab_login:
+        email = st.text_input("Email", key="login_email")
+        password = st.text_input("Password", type="password", key="login_pw")
+        
+        if st.button("Sign In"):
             try:
-                exec(code)
+                user = auth.sign_in_with_email_and_password(email, password)
+                st.session_state.user = user
+                st.rerun()
             except Exception as e:
-                st.error(f"⚠️ Σφάλμα: {e}")
+                st.error(f"Login failed: {str(e)}")
+    
+    with tab_register:
+        new_email = st.text_input("Email", key="reg_email")
+        new_pw = st.text_input("Password", type="password", key="reg_pw")
+        confirm_pw = st.text_input("Confirm Password", type="password", key="confirm_pw")
+        
+        if st.button("Create Account"):
+            if new_pw != confirm_pw:
+                st.error("Passwords don't match!")
+            else:
+                try:
+                    user = auth.create_user_with_email_and_password(new_email, new_pw)
+                    st.success("Account created! Please login.")
+                except Exception as e:
+                    st.error(f"Registration failed: {str(e)}")
 
-    # Help from AI Agent
-    if st.button("🤖 Ζήτα βοήθεια από τον MentorAgent"):
-        st.info("Ο MentorAgent λέει: 'Δοκίμασε να δεις αν το x είναι μικρότερο από 5 και χρησιμοποίησε else!'")
+# Main App (protected content)
+def show_app():
+    st.title(f"📚 Welcome, {st.session_state.user['email']}!")
+    st.button("Logout", on_click=lambda: st.session_state.clear())
+    
+    # YOUR ACTUAL APP CONTENT GOES HERE
+    st.success("You're now logged in! Add your app content here.")
+
+# Router
+if st.session_state.user:
+    show_app()
+else:
+    show_login()
