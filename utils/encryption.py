@@ -37,5 +37,4 @@ def decrypt_message(encrypted_message: str) -> str:
         decrypted_message = fernet.decrypt(decoded_encrypted_message)
         return decrypted_message.decode()
     except InvalidToken:
-        #print("Decryption failed: Invalid token")
         return None
