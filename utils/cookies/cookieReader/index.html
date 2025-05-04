@@ -47,8 +47,8 @@
         for (var i = 0; i < cookies.length; i++) {
           var cookie = cookies[i].split("=");
           var key = cookie[0];
-          var value = cookie[1];
-          cookieDict[key] = value;
+          var value = cookie.slice(1).join("="); // in case value contains '='
+          cookieDict[key] = decodeURIComponent(value);
         }
         
         // send cookies to Python
