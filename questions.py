@@ -120,7 +120,58 @@ def q_1_4():
         evaluate_answer(answer)
 
 
+
+
 def q_1_5():
+        st.subheader("1.5: Lists")
+        st.write("Lists in Python store multiple values. They are created with brackets [] and the values ​​are separated by commas.")
+        st.write("They always start from element zero. For example:")
+        st.write("The first element of the list is printed.")
+
+        col1, col2 = st.columns([0.6, 0.4])
+        with col1: st.code("fruits = [\"apple\",\"banana\",\"orange\"]\nprint(fruits[0])")
+        with col2: st.code("apple", language=None)
+
+        answer = "dog"
+        st.session_state.editor_content = "animals = [\"cat\",\"dog\",\"snake\"]"
+        st.write(f"Look at the list and print\"{answer}\"")
+        evaluate_answer(answer)
+
+
+
+def q_2_1():
+        st.subheader("1.7: Logical Operators")
+        st.write("There three important logical operators. They are AND, OR and NOT.")
+        st.write("The operator AND is for when both conditions must be true. For Example:")
+        st.write("When one is true and the other is false, it becomes false. For Example:")
+        col1, col2 = st.columns([0.6, 0.4])
+        with col1: st.code("greeting = \"Hey\"\nname=\"Friend\"\nprint(greeting + name))")
+        with col2: st.code("Hey Friend", language=None)
+
+        answer = "minecraft"
+        st.session_state.editor_content = "animals = [\"cat\",\"dog\",\"snake\"]"
+        st.session_state.editor_content = "part1=\"mine\"\n"+\
+                    "part2=\"craft\"\n"
+        st.write(f"Combine part1 and part2 in order to print\"{answer}\"")
+        evaluate_answer(answer)
+
+def q_2_1():
+        st.subheader("1.7: String Concatenation")
+        st.write("In Python we can concatenate strings using the + operator. For example:")
+        st.write("Two strings are joined to create a message.")
+
+        col1, col2 = st.columns([0.6, 0.4])
+        with col1: st.code("greeting = \"Hey\"\nname=\"Friend\"\nprint(greeting + name))")
+        with col2: st.code("Hey Friend", language=None)
+
+        answer = "minecraft"
+        st.session_state.editor_content = "animals = [\"cat\",\"dog\",\"snake\"]"
+        st.session_state.editor_content = "part1=\"mine\"\n"+\
+                    "part2=\"craft\"\n"
+        st.write(f"Combine part1 and part2 in order to print\"{answer}\"")
+        evaluate_answer(answer)
+
+def q_2_5():
         st.subheader("1.5: Basic Comparisons")
         st.write("In Python we can compare values ​​using operators such as == (equal), != (not equal), > (greater than), < (less than).")
         st.write("The outcome is either True or False. For example:")
@@ -140,7 +191,3 @@ def q_1_5():
         st.session_state.editor_content = "print(5>3)"
         st.write(f"Change it in order to be \"{answer}\" and printing it out.")
         evaluate_answer(answer)
-
-
-
-
