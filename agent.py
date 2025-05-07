@@ -9,7 +9,7 @@ from google.api_core.exceptions import ResourceExhausted
 
 # === Load API Key ===
 try:
-    with open("private/agentKey.txt", "r") as f:
+    with open("private/agents/agentKey.txt", "r") as f:
         api_key = f.read().strip()
 except FileNotFoundError:
     st.error("API key file not found. Please ensure 'private/agentKey.txt' exists.")
