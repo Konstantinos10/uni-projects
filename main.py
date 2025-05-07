@@ -5,6 +5,7 @@ from utils.logger import log
 from utils.cookies.cookieManager import get_cookies, set_cookie
 from utils.encryption import encrypt_message, decrypt_message
 
+st.set_page_config(layout="wide")
 
 # get user cookies
 if "cookies" not in st.session_state or st.session_state.cookies == None:
@@ -28,7 +29,6 @@ if 'user' not in st.session_state or st.session_state.user == None:
             st.session_state.user = user
 
         except: 
-            log("Couldn't get user with user token, trying refresh token")
             # if token is invalid, try to refresh it
             try:
                 refresh_token = decrypt_message(cookies["refresh_token"])   # get refresh token from cookies
@@ -44,9 +44,9 @@ if 'user' not in st.session_state or st.session_state.user == None:
 # set available pages based on login status
 if st.session_state.user:
     pages = {
-    "" : [st.Page("page1.py", title="Home"),
-          st.Page("question.py", title="Question"),
-          st.Page("quiz.py", title="Chapters")]
+    "" : [st.Page("page1.py", title="home"),
+          st.Page("question.py", title="Question")]
+
           }
 else:
     pages = [st.Page("login.py", title="Login Page")]
