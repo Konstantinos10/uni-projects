@@ -16,7 +16,7 @@ def reset_question_state():
 # temporary hardcoded values, will be replaced later
 if "current_chapter" not in st.session_state or "current_question" not in st.session_state:
     st.session_state.current_question = st.session_state.current_chapter = 1
-    st.session_state.max_question = 3 # set this to the number of questions in the chapter
+    st.session_state.max_question = 8 # set this to the number of questions in the chapter
 
 
 colA, colB = st.columns([0.2, 0.8])

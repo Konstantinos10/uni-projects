@@ -25,6 +25,24 @@ selected_chapter = st.selectbox(
 # Show selected chapter content
 st.title(selected_chapter)
 
+jvs =  """
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const buttons = document.querySelectorAll('.stButton > button');
+    buttons.forEach(button => {
+        button.addEventListener('click', function() {
+            buttons.forEach(btn => {
+                btn.style.backgroundColor = '#FFFFFF';
+            });
+            this.style.backgroundColor = '#C1FFC1';
+        });
+    });
+});
+</script>
+"""
+
+html(jvs)
+
 if selected_chapter == "Κεφάλαιο 1":
     st.write("Βασικές Έννοιες Python")
     st.button("1. Εκτυπωση κειμενου")
@@ -77,10 +95,13 @@ st.markdown("""
         width: 80%;
         padding: 10px;
         margin: 2px 0;
-        background-color: #90EE90;  
+        background-color: #FFFFFF;  
         color: #000000; 
         border: 1px solid #76C776;
         transition: all 0.3s ease;  
+    }
+            .stButton>button:active, .stButton>button:focus {
+        background-color: #C1FFC1 !important;
     }
 </style>
 """, unsafe_allow_html=True)

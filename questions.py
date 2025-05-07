@@ -104,3 +104,43 @@ def q_1_3():
                     "print(\"comments are useful\")\n"
                                         
     evaluate_answer(answer)
+
+def q_1_4():
+        st.subheader("1.4: Simple Operations")
+        st.write("In python we can do addition, subtraction, multiplication and division. The symbols are +, -, * and /.")
+        st.write("The priority of operations is the same as in mathematics. For example:")
+
+        col1, col2 = st.columns([0.6, 0.4])
+        with col1: st.code("print(\"9+3-2\")")
+        with col2: st.code("10", language=None)
+
+        answer = "10\n6\n16\n4"
+        st.write("To continue trye to use the command print in order to print the numbers \"10\", \"6\", \"16\" and \"4\", using only the numbers 8 and 2")
+
+        evaluate_answer(answer)
+
+
+def q_1_5():
+        st.subheader("1.5: Basic Comparisons")
+        st.write("In Python we can compare values ​​using operators such as == (equal), != (not equal), > (greater than), < (less than).")
+        st.write("The outcome is either True or False. For example:")
+        st.write("This is a true statement:")
+
+        col1, col2 = st.columns([0.6, 0.4])
+        with col1: st.code("print(5>3)")
+        with col2: st.code("True", language=None)
+
+        st.write("This is a false statement:")
+        
+        col1, col2 = st.columns([0.6, 0.4])
+        with col1: st.code("print(5<3)")
+        with col2: st.code("False", language=None)
+
+        answer = "False"
+        st.session_state.editor_content = "print(5>3)"
+        st.write(f"Change it in order to be \"{answer}\" and printing it out.")
+        evaluate_answer(answer)
+
+
+
+
