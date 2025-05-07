@@ -3,9 +3,6 @@ import streamlit as st
 import json
 import time
 from random import shuffle
-from utils.encryption import decrypt_message
-from utils.cookies.cookieManager import get_cookies
-from utils.firebase import auth
 from firebase_admin import firestore
 
 # Task files
@@ -19,12 +16,9 @@ db = firestore.client()
 # Initialize points and level
 def initialize_points():
     if "points" not in st.session_state:
-        cookies = get_cookies()
-        encrypted_username = cookies.get("username") if cookies else None
-
-        if encrypted_username:
+        username = st.session_state.get("username")
+        if username:
             try:
-                username = decrypt_message(encrypted_username)
                 users_ref = db.collection("users")
                 query = users_ref.where("username", "==", username).limit(1).stream()
                 for doc in query:

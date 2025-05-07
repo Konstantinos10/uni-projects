@@ -2,7 +2,6 @@ import streamlit as st
 import time
 from utils.cookies.cookieManager import delete_cookie
 from utils.encryption import decrypt_message
-from utils.cookies.cookieManager import get_cookies
 from firebase_admin import firestore
 
 db = firestore.client()
@@ -39,5 +38,6 @@ if st.button("Logout"):
 
     delete_cookie("user_token")
     delete_cookie("refresh_token")
+    delete_cookie("username")
     time.sleep(0.5)
     st.rerun()

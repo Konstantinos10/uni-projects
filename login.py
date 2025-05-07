@@ -34,9 +34,11 @@ with tab_login:
             # set user token in cookies(remember to encrypt it)
             set_cookie("user_token", encrypt_message(user["idToken"]))
             set_cookie("refresh_token", encrypt_message(user["refreshToken"]))
+            set_cookie("username", encrypt_message(username))
             time.sleep(0.5) # Give time for the cookies to be set
             
             st.session_state.user = user
+            st.session_state.cookies["username"] = encrypt_message(username)
             st.rerun()
         
         except Exception as e:
