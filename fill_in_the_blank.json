@@ -1,0 +1,38 @@
+[
+    {
+      "id": "fib1",
+      "type": "fill_in_blank",
+      "question_template": "def greet():\n    ___(\"Hello\")\n___()",
+      "correct_sequence": ["print", "greet"],
+      "options": ["print", "def", "Hello", "greet", "return"],
+      "description": "Make a function which when called will print hello",
+      "points": 200
+    },
+    {
+      "id": "fib2",
+      "type": "fill_in_blank",
+      "question_template": "for i in ___(___):\n    print(i)",
+      "correct_sequence": ["range", "5"],
+      "options": ["print", "range", "def", "5", "in"],
+      "description": "print the numbers 0...4",
+      "points": 200
+    },
+    {
+      "id": "fib3",
+      "type": "fill_in_blank",
+      "question_template": "def ___():\n    y = 5\n    x = ___\n    x += y\n    return ___ + 2\nprint(myFunction())",
+      "correct_sequence": ["myFunction", "3", "x"],
+      "options": ["myFunction", "3", "add", "2", "x", "y"],
+      "description": "Complete the function to print 10",
+      "points": 300
+    },
+    {
+        "id": "fib4",
+        "type": "fill_in_blank",
+        "question_template": "x = 1\nwhile x < ___ :\n    print(___)\n    x += ___",
+        "correct_sequence": ["5", "x", "1"],
+        "options": ["1", "print", "y", "5", "x", "True", "0", "in"],
+        "description": "Fill in the blanks to make a while loop which prints the numbers 1...5",
+        "points": 300
+    }
+]

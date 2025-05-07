@@ -1,0 +1,47 @@
+[
+  {
+      "id": "mc1",
+      "type": "multiple_choice",
+      "description": "What would be printed after we run this code?",
+      "question": "x = 5\ny = 2\nprint(x * y)",
+      "options": ["7", "10", "3", "52"],
+      "correct_answer": "10",
+      "points": 100
+  },
+  {
+      "id": "mc2",
+      "type": "multiple_choice",
+      "description": "What is the value of x after we run this code?",
+      "question": "x = 3\nfor i in range(2):\n    x += i\nprint(x)",
+      "options": ["3", "4", "5", "6"],
+      "correct_answer": "5",
+      "points": 200
+  },
+  {
+      "id": "mc3",
+      "type": "multiple_choice",
+      "description": "What would be printed after we run this code?",
+      "question": "def greet(name):\n    return 'Hello, ' + name\nprint(greet('Alice'))",
+      "options": ["Hello, Alice", "Hello", "Alice", "greet(Alice)", "Hello, name"],
+      "correct_answer": "Hello, Alice",
+      "points": 150
+  },
+  {
+      "id": "mc4",
+      "type": "multiple_choice",
+      "description": "What is the value of lst after we run this code?",
+      "question": "lst = [1, 2, 3]\nlst.append(4)\nlst[0] = 0",
+      "options": ["[1, 2, 3, 4]", "[0, 2, 3, 4]", "[0, 2, 3]", "[1, 2, 3]", "[4, 2, 3]"],
+      "correct_answer": "[0, 2, 3, 4]",
+      "points": 150
+  },
+  {
+      "id": "mc5",
+      "type": "multiple_choice",
+      "description": "What would be printed after we run this code?",
+      "question": "x = 10\nif x > 5:\n    print('Big')\nelse:\n    print('Small')",
+      "options": ["Big", "Small", "10", "5"],
+      "correct_answer": "Big",
+      "points": 100
+  }
+]
