@@ -44,10 +44,10 @@ if 'user' not in st.session_state or st.session_state.user == None:
 # set available pages based on login status
 if st.session_state.user:
     pages = {
-    "" : [st.Page("page1.py", title="home"),
+    "" : [st.Page("page1.py", title="Home"),
           st.Page("question.py", title="Question"),
-          st.Page("quiz.py", title="Chapters"),
-          st.Page("task.py", title="Quiz")]
+          st.Page("chapter_menu.py", title="Learn"),
+          st.Page("task.py", title="Puzzles")]
           }
 else:
     pages = [st.Page("login.py", title="Login Page")]
