@@ -170,9 +170,78 @@ def q_1_5():
         st.write(f"Look at the list and print\"{answer}\"")
         evaluate_answer(answer)
 
+def q_1_6():
+        st.subheader("2.1: Intengers")
+        st.write("Integers are whole numbers. They can be positive, negative or even zero.")
+        st.write("You can set a variable as int. For example:")
+        st.write("These are some intergers.")
 
-def q_2_5():
-        st.subheader("2.5: String Concatenation")
+        col1, col2 = st.columns([0.6, 0.4])
+        with col1: st.code("a=4 #positive interger\nb=-4 #negative interger\nc=0 #zero is an interger\nprint(a,b,c)")
+        with col2: st.code("4 -4 0", language=None)
+
+        st.write("You can also turn decimal numbers into integers through the int() function. For example:")
+        st.write("This number will turn into an integer.")
+
+        col1, col2 = st.columns([0.6, 0.4])
+        with col1: st.code("d=4.5\nprint(int(d))")
+        with col2: st.code("4", language=None)
+
+        answer = "5"
+        st.session_state.editor_content = "num = 5.2\n"+\
+                                          "print(num)"
+        st.write(f"Fix it in order to print\"{answer}\"")
+        evaluate_answer(answer)
+
+def q_1_7():
+        st.subheader("2.2: Floats")
+        st.write("Floats are numbers that are positive or negative, where they contain one or more decimals")
+        st.write("You can set a variable as float. For example:")
+        st.write("These are some floats.")
+
+        col1, col2 = st.columns([0.6, 0.4])
+        with col1: st.code("a=4.2 #positive float\nb=-4.7 negative float\nprint(a,b)")
+        with col2: st.code("4.2 -4.7", language=None)
+
+        st.write("You can also turn integer numbers into floats through the float() function. For example:")
+        st.write("This number will turn into an float.")
+
+        col1, col2 = st.columns([0.6, 0.4])
+        with col1: st.code("d=4\nprint(float(d))")
+        with col2: st.code("4.0", language=None)
+
+        answer = "7.0"
+        st.session_state.editor_content = "num = 7\n"+\
+                                          "print(num)"
+        st.write(f"Change what the line print contains in order to print\"{answer}\"")
+        evaluate_answer(answer)
+
+
+def q_1_8():
+        st.subheader("2.3: Strings")
+        st.write("Strings are ways to use textual data. You can save a string in python through (\"\") or ('')")
+        st.write("You can set variables as string. For example:")
+        st.write("These are some strings.")
+
+        col1, col2 = st.columns([0.6, 0.4])
+        with col1: st.code("a=\"animal\"#string\nb='human'#also string\nprint(a,b)")
+        with col2: st.code("animal human", language=None)
+
+        st.write("You can also turn integer numbers into string through the str() function. For example:")
+        st.write("This number will turn into string.")
+
+        col1, col2 = st.columns([0.6, 0.4])
+        with col1: st.code("str(4)")
+        with col2: st.code("'4'", language=None)
+
+        answer = "dracula"
+        st.session_state.editor_content = "t = \n"+\
+                                          "print(t)"
+        st.write(f"Put the right content in the first line of code in order to print \"{answer}\"")
+        evaluate_answer(answer)
+
+def q_1_9():
+        st.subheader("2.4: String Concatenation")
         st.write("In Python we can concatenate strings using the + operator. For example:")
         st.write("Two strings are joined to create a message.")
 
@@ -181,14 +250,31 @@ def q_2_5():
         with col2: st.code("Hey Friend", language=None)
 
         answer = "minecraft"
-        st.session_state.editor_content = "animals = [\"cat\",\"dog\",\"snake\"]"
         st.session_state.editor_content = "part1=\"mine\"\n"+\
-                    "part2=\"craft\"\n"
+                                           "part2=\"craft\"\n"+\
+                                           "print()"
         st.write(f"Combine part1 and part2 in order to print\"{answer}\"")
         evaluate_answer(answer)
 
+def q_1_10():
+        st.subheader("2.5: Booleans")
+        st.write("Booleans can have only one of two values. They are either True or False. For example:")
+        st.write("You can set one variable as False")
 
-def q_3_1():
+        col1, col2 = st.columns([0.6, 0.4])
+        with col1: st.code("a = False\nprint(a))")
+        with col2: st.code("False", language=None)
+
+        answer = "True"
+        st.session_state.editor_content = "a=True\n"+\
+                                          "b=False\n"+\
+                                          "print()"
+
+        st.write(f"Put the right variable into print in order to get a \"{answer}\" statement")
+        evaluate_answer(answer)
+
+
+def q_1_11():
         st.subheader("3.1: Basic Comparisons")
         st.write("In Python we can compare values ​​using operators such as == (equal), != (not equal), > (greater than), < (less than).")
         st.write("The outcome is either True or False. For example:")
@@ -210,7 +296,24 @@ def q_3_1():
         evaluate_answer(answer)
 
 
-def q_3_2():
+def q_1_12():
+        st.subheader("3.2: If Statement")
+        st.write("The if statement checks if it's true. If it's true it proceeds to execute the code. For example:")
+        st.write("You can set one variable as False")
+
+        col1, col2 = st.columns([0.6, 0.4])
+        with col1: st.code("num=5\nif num > 0:\n     print(\"postive\")")
+        with col2: st.code("positive", language=None)
+
+        answer = "hot"
+        st.session_state.editor_content = "celcius=20\n"+\
+                                          "if celcius > 30:\n"+\
+                                          "     print(\"hot\")"
+
+        st.write(f"Change the value in celcius in order to print the word \"{answer}\"")
+        evaluate_answer(answer)
+
+def q_3_12():
         st.subheader("3.1: Logical Operators")
         st.write("There three important logical operators. They are AND, OR and NOT.")
         st.write("The operator AND is for when both conditions must be true. For Example:")
