@@ -8,7 +8,7 @@ from google.api_core.exceptions import ResourceExhausted
 import firebase_admin
 from firebase_admin import credentials, firestore
 from questions import chapters
-from agent_utils import get_username, get_user_data, explain_task
+from agent_utils import get_username, get_user_data, explain_task, run_code
 
 # === Initialize Firebase ===
 if not firebase_admin._apps:
@@ -41,8 +41,32 @@ llm = ChatGoogleGenerativeAI(
     max_retries=2,
     google_api_key=api_key,
 )
-tools = [get_username, get_user_data, explain_task]
+tools = [get_username, get_user_data, explain_task, run_code]
 model = llm.bind_tools(tools)
+
+system_message = f"""You're a helpful Python tutor agent. Answer clearly and concisely.
+        When the user asks to learn Python or start a lesson, call get_username to retrieve their username,
+        then call get_user_data to fetch their completed chapters (e.g. 1.1, 1.2). Use the following chapter information to suggest
+        appropriate topics based on completed chapters:
+
+        {chapters}
+
+        For each chapter (e.g. 1.1, 1.2, 1.3), the dictionary provides the title, description, and question topics
+        (e.g. 1.1 is 'Hello World!', 1.2 is 'Variables'). If chapters are completed, suggest the next topics or chapters,
+        referencing the chapter titles and question topics. If no chapters are completed or data is unavailable,
+        recommend starting with Chapter 1: Basic Concepts (covering Hello World!, Variables, Comments, Arithmetic operators, Lists).
+        Use the tools only when necessary and avoid redundant calls if the username is already known.
+
+        When the user asks for help with a task (e.g. 'help me with task fib1'), call the explain_task tool with the appropriate
+        task_id and task_type to retrieve and explain the task, including its details and the correct answer with reasoning.
+        fib - fill in the blank
+        mc - multiple choice
+        co - code output
+        You always have to explain why the answer you gave is the right one.
+        
+        If at any point you need to run code, use the run_code tool. It takes a string of python code as input and returns the
+        standard output and error output in a dictionary. You should have no problem running any python code, the tool is designed
+        to handle errors and automatically stops after 1 second"""
 
 # === Tool Node ===
 def call_tool(state: AgentState):
@@ -115,25 +139,7 @@ st.markdown("Ask any Python-related question, or get help with specific tasks!")
 # Initialize session state
 if "message_history" not in st.session_state:
     st.session_state.message_history = [ 
-        SystemMessage(content=f"""You're a helpful Python tutor agent. Answer clearly and concisely.
-        When the user asks to learn Python or start a lesson, call get_username to retrieve their username,
-        then call get_user_data to fetch their completed chapters (e.g. 1.1, 1.2). Use the following chapter information to suggest
-        appropriate topics based on completed chapters:
-
-        {chapters}
-
-        For each chapter (e.g. 1.1, 1.2, 1.3), the dictionary provides the title, description, and question topics
-        (e.g. 1.1 is 'Hello World!', 1.2 is 'Variables'). If chapters are completed, suggest the next topics or chapters,
-        referencing the chapter titles and question topics. If no chapters are completed or data is unavailable,
-        recommend starting with Chapter 1: Basic Concepts (covering Hello World!, Variables, Comments, Arithmetic operators, Lists).
-        Use the tools only when necessary and avoid redundant calls if the username is already known.
-
-        When the user asks for help with a task (e.g. 'help me with task fib1'), call the explain_task tool with the appropriate
-        task_id and task_type to retrieve and explain the task, including its details and the correct answer with reasoning.
-        fib - fill in the blank
-        mc - multiple choice
-        co - code output
-        You always have to explain why the answer you gave is the right one.""")
+        SystemMessage(content=system_message)
     ]
 if "number_of_steps" not in st.session_state:
     st.session_state.number_of_steps = 0
@@ -186,22 +192,7 @@ if submit_button and user_question:
     # For resetting the session
     if user_question.lower() in ["exit", "quit"]:
         st.session_state.message_history = [ 
-        SystemMessage(content=f"""You're a helpful Python tutor agent. Answer clearly and concisely.
-            When the user asks to learn Python or start a lesson, call get_username to retrieve their username,
-            then call get_user_data to fetch their completed chapters (e.g. 1.1, 1.2). Use the following chapter information to suggest
-            appropriate topics based on completed chapters:
-
-            {chapters}
-
-            For each chapter (e.g. 1.1, 1.2, 1.3), the dictionary provides the title, description, and question topics
-            (e.g. 1.1 is 'Hello World!', 1.2 is 'Variables'). If chapters are completed, suggest the next topics or chapters,
-            referencing the chapter titles and question topics. If no chapters are completed or data is unavailable,
-            recommend starting with Chapter 1: Basic Concepts (covering Hello World!, Variables, Comments, Arithmetic operators, Lists).
-            Use the tools only when necessary and avoid redundant calls if the username is already known.
-
-            When the user asks for help with a task (e.g. 'help me with task fib1'), call the explain_task tool with the appropriate
-            task_id and task_type to retrieve and explain the task, including its details and the correct answer with reasoning.
-            You always have to explain why the answer you gave is the right one.""")
+            SystemMessage(content=system_message)
         ]
         st.session_state.number_of_steps = 0
         st.session_state.username = st.session_state.get("username")

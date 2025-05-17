@@ -3,6 +3,7 @@ import json
 import logging
 from langchain_core.tools import tool
 from firebase_admin import firestore
+from code_editor import run_code as code_run #epic way to prevent recursion
 
 # Setup logging
 logger = logging.getLogger(__name__)
@@ -16,6 +17,17 @@ TASK_FILES = {
 
 # Initialize Firestore client
 db = firestore.client()
+
+@tool
+def run_code(code: str) -> dict:
+    """Run the provided python code and return the output.
+    Args:
+        code (str): The python code to run.
+    Returns:
+        dict: A dictionary containing the standard output and error output.
+    """
+    output, error = code_run(code)
+    return {"stdout": output, "stderr": error}
 
 @tool
 def get_username(tool_input: dict = None) -> str:
