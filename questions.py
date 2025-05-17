@@ -33,22 +33,22 @@ chapters ={1: {"title": "Basic Concepts",
                 },
             2: {"title": "Basic Data Types",
                 "description": "Learn the basic data types of python, such as strings, integers and floats.",
-                "questions": { #TODO: innacurate, update later
-                    1: "integers",
-                    2: "floats",
-                    3: "strings",
-                    4: "boolean"
+                "questions": { 
+                    1: "Integers",
+                    2: "Floats",
+                    3: "Strings",
+                    4: "String Concatenation",
+                    5: "Booleans"
                 }
                 },
             3: {"title": "If-else statements",
                 "description": "Learn how to use if-else statements to control the flow of your program.",
-                "questions": { #TODO: innacurate, update later
-                    1: "if statements",
-                    2: "if-else statements",
-                    3: "if-elif-else statements",
-                    4: "Nested if statements",
-                    5: "Logical operators",
-                    6: "Boolean operators"
+                "questions": {
+                    1: "Basic Comparisons",
+                    2: "If Statement",
+                    3: "Logical Operators"
+                    #4: "If-else Statements",
+                    #5: "If-elif-else Statements"
                 }
                 }
            }
@@ -170,7 +170,7 @@ def q_1_5():
         st.write(f"Look at the list and print\"{answer}\"")
         evaluate_answer(answer)
 
-def q_1_6():
+def q_2_1():
         st.subheader("2.1: Intengers")
         st.write("Integers are whole numbers. They can be positive, negative or even zero.")
         st.write("You can set a variable as int. For example:")
@@ -193,7 +193,7 @@ def q_1_6():
         st.write(f"Fix it in order to print\"{answer}\"")
         evaluate_answer(answer)
 
-def q_1_7():
+def q_2_2():
         st.subheader("2.2: Floats")
         st.write("Floats are numbers that are positive or negative, where they contain one or more decimals")
         st.write("You can set a variable as float. For example:")
@@ -217,7 +217,7 @@ def q_1_7():
         evaluate_answer(answer)
 
 
-def q_1_8():
+def q_2_3():
         st.subheader("2.3: Strings")
         st.write("Strings are ways to use textual data. You can save a string in python through (\"\") or ('')")
         st.write("You can set variables as string. For example:")
@@ -240,7 +240,7 @@ def q_1_8():
         st.write(f"Put the right content in the first line of code in order to print \"{answer}\"")
         evaluate_answer(answer)
 
-def q_1_9():
+def q_2_4():
         st.subheader("2.4: String Concatenation")
         st.write("In Python we can concatenate strings using the + operator. For example:")
         st.write("Two strings are joined to create a message.")
@@ -256,7 +256,7 @@ def q_1_9():
         st.write(f"Combine part1 and part2 in order to print\"{answer}\"")
         evaluate_answer(answer)
 
-def q_1_10():
+def q_2_5():
         st.subheader("2.5: Booleans")
         st.write("Booleans can have only one of two values. They are either True or False. For example:")
         st.write("You can set one variable as False")
@@ -274,7 +274,7 @@ def q_1_10():
         evaluate_answer(answer)
 
 
-def q_1_11():
+def q_3_1():
         st.subheader("3.1: Basic Comparisons")
         st.write("In Python we can compare values ​​using operators such as == (equal), != (not equal), > (greater than), < (less than).")
         st.write("The outcome is either True or False. For example:")
@@ -296,7 +296,7 @@ def q_1_11():
         evaluate_answer(answer)
 
 
-def q_1_12():
+def q_3_2():
         st.subheader("3.2: If Statement")
         st.write("The if statement checks if it's true. If it's true it proceeds to execute the code. For example:")
         st.write("You can set one variable as False")
@@ -313,8 +313,8 @@ def q_1_12():
         st.write(f"Change the value in celcius in order to print the word \"{answer}\"")
         evaluate_answer(answer)
 
-def q_3_12():
-        st.subheader("3.1: Logical Operators")
+def q_3_3():
+        st.subheader("3.3: Logical Operators")
         st.write("There three important logical operators. They are AND, OR and NOT.")
         st.write("The operator AND is for when both conditions must be true. For Example:")
         st.write("When one is true and the other is false, it becomes false. For Example:")

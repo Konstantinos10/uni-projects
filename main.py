@@ -13,6 +13,7 @@ if "cookies" not in st.session_state or st.session_state.cookies == None:
     if cookies == None:
         st.stop() #don't run app until cookies are set
     st.session_state.cookies = cookies
+    st.rerun() #rerun to get rid of the html cookies component
 cookies = st.session_state.cookies
 
 
@@ -45,7 +46,6 @@ if 'user' not in st.session_state or st.session_state.user == None:
 if st.session_state.user:
     pages = {
     "" : [st.Page("page1.py", title="Home"),
-          st.Page("question.py", title="Question"),
           st.Page("chapter_menu.py", title="Learn"),
           st.Page("task.py", title="Puzzles"),
           st.Page("agent.py", title="Agent")]
