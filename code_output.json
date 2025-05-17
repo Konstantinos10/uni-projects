@@ -1,0 +1,98 @@
+[
+    {
+        "id": "co1",
+        "type": "code_output",
+        "code": "x = 5\ny = 3\nprint(x + y)",
+        "correct_output": "8",
+        "description": "Determine what the following code will print.",
+        "points": 200
+    },
+    {
+        "id": "co2",
+        "type": "code_output",
+        "code": "for i in range(3):\n    print(i)",
+        "correct_output": "0\n1\n2",
+        "description": "Enter the exact output of the loop, including newlines.",
+        "points": 250
+    },
+    {
+        "id": "co3",
+        "type": "code_output",
+        "code": "def greet(name):\n    return 'Hello, ' + name + '!'\nprint(greet('Alice'))",
+        "correct_output": "Hello, Alice!",
+        "description": "What will the function print when called with 'Alice'?",
+        "points": 300
+    },
+    {
+        "id": "co4",
+        "type": "code_output",
+        "code": "x = 1\nwhile x <= 3:\n    print(x)\n    x += 1",
+        "correct_output": "1\n2\n3",
+        "description": "Enter the output of the while loop, including newlines.",
+        "points": 300
+    },
+    {
+        "id": "co5",
+        "type": "code_output",
+        "code": "nums = [1, 2, 3]\nprint(nums[1])",
+        "correct_output": "2",
+        "description": "Determine what the list indexing operation will print.",
+        "points": 200
+    },
+    {
+        "id": "co6",
+        "type": "code_output",
+        "code": "text = 'Python'\nprint(text.upper())",
+        "correct_output": "PYTHON",
+        "description": "What will the string method print?",
+        "points": 250
+    },
+    {
+        "id": "co7",
+        "type": "code_output",
+        "code": "a = 10\nif a > 5:\n    print('Big')\nelse:\n    print('Small')",
+        "correct_output": "Big",
+        "description": "Enter the output of the conditional statement.",
+        "points": 300
+    },
+    {
+        "id": "co8",
+        "type": "code_output",
+        "code": "def square(num):\n    return num * num\nprint(square(4))",
+        "correct_output": "16",
+        "description": "What will the function print when called with 4?",
+        "points": 300
+    },
+    {
+        "id": "co9",
+        "type": "code_output",
+        "code": "print('3' * 2)",
+        "correct_output": "33",
+        "description": "What happens when you multiply a string by an integer? Print the result.",
+        "points": 350
+    },
+    {
+        "id": "co10",
+        "type": "code_output",
+        "code": "def add_to_list(val, lst=[]):\n    lst.append(val)\n    return lst\nprint(add_to_list(1))\nprint(add_to_list(2))",
+        "correct_output": "[1]\n[1, 2]",
+        "description": "Understand default mutable arguments and how they persist across calls.",
+        "points": 500
+    },
+    {
+        "id": "co11",
+        "type": "code_output",
+        "code": "x = 10\ndef foo():\n    x = 5\n    print(x)\nfoo()\nprint(x)",
+        "correct_output": "5\n10",
+        "description": "Observe how variable scope affects values inside and outside a function.",
+        "points": 400
+    },
+    {
+        "id": "co12",
+        "type": "code_output",
+        "code": "print(True + True + False)",
+        "correct_output": "2",
+        "description": "What will be printed ?",
+        "points": 350
+    }
+]

@@ -47,7 +47,8 @@ if st.session_state.user:
     "" : [st.Page("page1.py", title="Home"),
           st.Page("question.py", title="Question"),
           st.Page("chapter_menu.py", title="Learn"),
-          st.Page("task.py", title="Puzzles")]
+          st.Page("task.py", title="Puzzles"),
+          st.Page("agent.py", title="Agent")]
           }
 else:
     pages = [st.Page("login.py", title="Login Page")]

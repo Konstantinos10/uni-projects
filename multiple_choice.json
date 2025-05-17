@@ -14,7 +14,7 @@
       "description": "What is the value of x after we run this code?",
       "question": "x = 3\nfor i in range(2):\n    x += i\nprint(x)",
       "options": ["3", "4", "5", "6"],
-      "correct_answer": "5",
+      "correct_answer": "4",
       "points": 200
   },
   {

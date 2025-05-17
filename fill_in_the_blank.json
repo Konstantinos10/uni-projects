@@ -13,7 +13,7 @@
       "type": "fill_in_blank",
       "question_template": "for i in ___(___):\n    print(i)",
       "correct_sequence": ["range", "5"],
-      "options": ["print", "range", "def", "5", "in"],
+      "options": ["print", "range", "0", "5", "4"],
       "description": "print the numbers 0...4",
       "points": 200
     },
@@ -29,8 +29,8 @@
     {
         "id": "fib4",
         "type": "fill_in_blank",
-        "question_template": "x = 1\nwhile x < ___ :\n    print(___)\n    x += ___",
-        "correct_sequence": ["5", "x", "1"],
+        "question_template": "x = 0\nwhile x < ___ :\n    x += ___\n    print(___)",
+        "correct_sequence": ["5", "1", "x"],
         "options": ["1", "print", "y", "5", "x", "True", "0", "in"],
         "description": "Fill in the blanks to make a while loop which prints the numbers 1...5",
         "points": 300
