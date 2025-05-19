@@ -19,6 +19,23 @@ TASK_FILES = {
 db = firestore.client()
 
 @tool
+def read_playground() -> str:
+    """Read the content of the playground code editor and output terminal.
+    If the code has run and is not later changed, the standard output and error output are also returned."""
+
+    if st.session_state.get("missmatched_output", False): return {"playground editor": st.session_state.get("playground_content", "INFO: Playground is empty.")},  
+    return {"playground editor": st.session_state.get("playground_content", "INFO: Playground is empty."),
+            "playground standard output": str(st.session_state.get('p_stdout', "")),
+            "playground standard error": str(st.session_state.get('p_stderr', ""))}
+
+@tool
+def write_playground(content: str) -> None:
+    """Write content to the playground code editor."""
+    st.session_state.playground_content = content
+    st.session_state.missmatched_output = True
+    st.session_state.reload_playground = True
+
+@tool
 def run_code(code: str) -> dict:
     """Run the provided python code and return the output.
     Args:

@@ -8,7 +8,7 @@ from google.api_core.exceptions import ResourceExhausted
 import firebase_admin
 from firebase_admin import credentials, firestore
 from questions import chapters
-from agent_utils import get_username, get_user_data, explain_task, run_code
+from agent_utils import get_username, get_user_data, explain_task, run_code, read_playground, write_playground
 
 # === Initialize Firebase ===
 if not firebase_admin._apps:
@@ -41,7 +41,7 @@ llm = ChatGoogleGenerativeAI(
     max_retries=2,
     google_api_key=api_key,
 )
-tools = [get_username, get_user_data, explain_task, run_code]
+tools = [get_username, get_user_data, explain_task, run_code, read_playground, write_playground]
 model = llm.bind_tools(tools)
 
 system_message = f"""You're a helpful Python tutor agent. Answer clearly and concisely.
@@ -66,7 +66,14 @@ system_message = f"""You're a helpful Python tutor agent. Answer clearly and con
         
         If at any point you need to run code, use the run_code tool. It takes a string of python code as input and returns the
         standard output and error output in a dictionary. You should have no problem running any python code, the tool is designed
-        to handle errors and automatically stops after 1 second"""
+        to handle errors and automatically stops after 1 second
+        
+        The user also has access to a playground code editor where they can test their own python code. You can read the content of this
+        editor and it's standard/error output with the read_playground tool. The tool usually returns a dictionary with just the editor content,
+        but if the code was run and not modified, it will return the standard and error output as well. You can write to the editor with the write_playground tool
+        but always read the content before writing to it. If you write to it make sure to rewrite the entire content of the editor, not just the new code.
+        You should also suggest the user to use the playground and encourage them to test their code there.
+        """
 
 # === Tool Node ===
 def call_tool(state: AgentState):

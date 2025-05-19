@@ -35,7 +35,7 @@ def setup_code_editor():
 
     col1, col2 = st.columns([0.6, 0.4])  # Adjust ratios as needed
 
-    with col1:    
+    with col1:
         # Spawn and initialize a new Ace editor
         content = st_ace(
             value=st.session_state.get("editor_content", ""),
