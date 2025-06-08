@@ -23,6 +23,7 @@ if username:
         st.session_state.cleared_questions = set(user_data.get("cleared_questions", []))
         st.session_state.points = user_data.get('exp', 0)
         st.session_state.username = username
+        st.session_state.elo = user_data.get('elo', 0)
 
         # Display user data
         st.title(f"Welcome back, {username}!")

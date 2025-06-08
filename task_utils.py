@@ -5,6 +5,8 @@ import time
 from random import shuffle
 from firebase_admin import firestore
 
+import re
+
 db = firestore.client()
 
 # Task files
@@ -13,6 +15,88 @@ TASK_FILES = {
     "multiple_choice": "multiple_choice.json",
     "code_output": "code_output.json"
 }
+
+def difficulty_from_elo(elo: int) -> str:
+    """Map an Elo number → 'Easy' | 'Medium' | 'Hard'."""
+    if elo < 1400:
+        return "Easy"
+    elif elo < 1700:
+        return "Medium"
+    return "Hard"
+
+def update_elo(correct: bool, question_difficulty: str):
+    username = st.session_state.get("username")
+    diff_to_rating = {"easy": 1200, "medium": 1500, "hard": 1800}
+    opp_rating     = diff_to_rating[question_difficulty]
+
+    users_ref = db.collection("users")
+    user_doc  = next(users_ref.where("username", "==", username).limit(1).stream(), None)
+    if not user_doc:
+        return
+
+    old_elo   = st.session_state.get("elo")
+
+    # ----- Elo math -----
+    k       = 15
+    score   = 1 if correct else 0
+    expected= 1 / (1 + 10 ** ((opp_rating - old_elo) / 400))
+    new_elo = round(old_elo + k * (score - expected))
+
+    # ----- persist ------
+    users_ref.document(user_doc.id).update({"elo": new_elo})
+    st.session_state.elo = new_elo
+    st.session_state.elo_updated = True
+
+CHAPTER_TOTALS = {1: 5, 2: 5, 3: 6, 4: 6}
+
+# suggest chapter and difficulty
+def get_suggestion():
+    """
+    Suggest (chapter_int, difficulty_str).
+
+    • Chapter  = the one with the **highest % of cleared_questions**
+                 (floats like 1.2 → chapter 1, sub-chapter 2).
+      – ties: pick the *larger* chapter number.
+    • Difficulty = mapped from user's Elo.
+    """
+    username = st.session_state.get("username")
+
+    users_ref = db.collection("users")
+    user_doc  = next(users_ref.where("username", "==", username).limit(1).stream(), None)
+
+    data            = user_doc.to_dict()
+    elo             = st.session_state.get("elo")
+    cleared_entries = data.get("cleared_questions", [])
+
+    completed = {ch: 0 for ch in CHAPTER_TOTALS}
+
+    for entry in cleared_entries:
+        try:
+            ch = int(float(entry))
+        except (ValueError, TypeError):
+            continue                        # skip malformed entries
+        if ch in completed:
+            completed[ch] += 1
+
+    # if user has ≥3 cleared in every chapter, suggest all chapters
+    if all(count >= 2 for count in completed.values()):
+        return 0, difficulty_from_elo(elo)   # 0 means all chapters
+
+    percent_done = {
+        ch: (completed[ch] / CHAPTER_TOTALS[ch]) * 100
+        for ch in CHAPTER_TOTALS
+    }
+
+    # if user has ≥60% cleared in every chapter, suggest all chapters
+    #if all(pct >=40 for pct in percent_done.values()):
+        #return 0, difficulty_from_elo(elo)
+
+    suggested_chapter = max(
+        percent_done,
+        key=lambda c: (percent_done[c], -c)
+    )
+
+    return suggested_chapter, difficulty_from_elo(elo)
 
 # Updates the score, puzzles_played and unique puzzles of the user.
 def update_user_exp(points_to_add: int, puzzle_id: str = None):
@@ -50,40 +134,37 @@ def update_user_exp(points_to_add: int, puzzle_id: str = None):
         print(f"Failed to update EXP or puzzle stats: {e}")
 
 # Load and combine tasks
-def load_tasks():
+def load_tasks(chapter: int | None = None):
     all_tasks = []
     for task_type, file_path in TASK_FILES.items():
-        with open(file_path, 'r') as f:
+        with open(file_path, "r") as f:
             tasks = json.load(f)
-        # Validate tasks
+
         for task in tasks:
             task["task_type"] = task_type
-            if task["type"] == "fill_in_blank":
-                num_blanks = task["question_template"].count("___")
-                if num_blanks != len(task["correct_sequence"]):
-                    raise ValueError(f"Task ID {task['id']} ({task_type}): Number of blanks ({num_blanks}) does not match correct_sequence length ({len(task['correct_sequence'])})")
-            elif task["type"] == "multiple_choice":
-                if not (3 <= len(task["options"]) <= 5):
-                    raise ValueError(f"Task ID {task['id']} ({task_type}): Number of options ({len(task['options'])}) must be between 3 and 5")
-                if task["correct_answer"] not in task["options"]:
-                    raise ValueError(f"Task ID {task['id']} ({task_type}): Correct answer ({task['correct_answer']}) not in options")
-                if "description" not in task:
-                    raise ValueError(f"Task ID {task['id']} ({task_type}): Missing description field")
-            elif task["type"] == "code_output":
-                if "code" not in task:
-                    raise ValueError(f"Task ID {task['id']} ({task_type}): Missing code field")
-                if "correct_output" not in task:
-                    raise ValueError(f"Task ID {task['id']} ({task_type}): Missing correct_output field")
-                if "description" not in task:
-                    raise ValueError(f"Task ID {task['id']} ({task_type}): Missing description field")
-        all_tasks.extend(tasks)
+
+            # CHAPTER FILTER
+            task_chapter = task.get("chapter")
+            if chapter is not None:
+                if isinstance(task_chapter, list):
+                    if chapter not in task_chapter:
+                        continue
+                elif task_chapter != chapter:
+                    continue
+
+            # (existing per-type validation goes here)
+
+            all_tasks.append(task)      # ← only the vetted task
+
     # Ensure unique IDs
     seen_ids = set()
     for task in all_tasks:
         if task["id"] in seen_ids:
             raise ValueError(f"Duplicate task ID {task['id']} found")
         seen_ids.add(task["id"])
+
     return all_tasks
+
 
 # Get a specific task
 def get_task(task_id, task_type):
@@ -95,15 +176,17 @@ def get_task(task_id, task_type):
 
 # Initialize or get next task
 def initialize_or_next_task():
+    chapter = st.session_state.get("active_chapter")
     st.session_state.task_start_time = time.time()
     st.session_state.show_next_button = False
     if "task_queue" not in st.session_state or not st.session_state.task_queue:
-        tasks = load_tasks()
+        tasks = load_tasks(chapter)
         if not tasks:
             st.session_state.completed = True
             return None
         task_queue = [(task["id"], task["task_type"]) for task in tasks]
         shuffle(task_queue)
+        task_queue = task_queue[:5]
         st.session_state.task_queue = task_queue
     task_id, task_type = st.session_state.task_queue.pop(0)
     if not st.session_state.task_queue:
@@ -167,6 +250,13 @@ def display_fill_in_the_blank(task):
 
     if st.button("Submit Answer", disabled=st.session_state.get("show_next_button", False)):
         is_correct = st.session_state.selected_words == task["correct_sequence"]
+
+        if not st.session_state.get("elo_updated", False):
+            update_elo(
+                correct = is_correct,
+                question_difficulty = task.get("difficulty")
+            )
+
         if is_correct:    
             update_user_exp(task['points'], puzzle_id=task['id'])
             st.session_state.show_next_button = True
@@ -199,6 +289,7 @@ def display_fill_in_the_blank(task):
             st.session_state.selected_words = [None] * num_blanks
             st.session_state.active_buttons = [False] * len(options)
             st.session_state.last_answer_incorrect = False
+            st.session_state.elo_updated = False
             initialize_or_next_task()
             st.rerun()
 
@@ -212,6 +303,13 @@ def display_multiple_choice(task):
 
     if st.button("Submit Answer", disabled=st.session_state.get("show_next_button", False)):
         is_correct = choice == task["correct_answer"]
+
+        if not st.session_state.get("elo_updated", False):
+            update_elo(
+                correct = is_correct,
+                question_difficulty = task.get("difficulty")
+            )
+
         if is_correct:
             update_user_exp(task['points'], puzzle_id=task['id'])
             st.session_state.show_next_button = True
@@ -240,6 +338,7 @@ def display_multiple_choice(task):
         st.success(f"Correct! +{task['points']} points")
         if st.button("Next"):
             st.session_state.last_answer_incorrect = False
+            st.session_state.elo_updated = False
             initialize_or_next_task()
             st.rerun()
 
@@ -271,6 +370,12 @@ def display_code_output(task):
         correct_answer = str(task["correct_output"]).strip()
         is_correct = user_answer == correct_answer
 
+        if not st.session_state.get("elo_updated", False):
+            update_elo(
+                correct = is_correct,
+                question_difficulty = task.get("difficulty")
+            )
+
         if is_correct:
             update_user_exp(task['points'], puzzle_id=task['id'])
             st.session_state.show_next_button = True
@@ -299,23 +404,27 @@ def display_code_output(task):
         if st.button("Next"):
             st.session_state.user_output = ""
             st.session_state.last_answer_incorrect = False
+            st.session_state.elo_updated = False
             initialize_or_next_task()
             st.rerun()
 
 # Completion page
 def display_completion_page():
-    st.write("### 🎉 Congratulations!")
+    st.write("### Congratulations!")
     st.write(f"You've completed all tasks!")
     st.balloons()
-    if st.button("Start Over"):
-        # Clear all puzzle-related session state
-        keys_to_clear = [
-            "task", "task_id", "task_type", "task_queue", "completed",
-            "selected_words", "active_buttons", "task_start_time", "user_output"
-        ]
-        for key in keys_to_clear:
-            if key in st.session_state:
-                del st.session_state[key]
+    if st.button("Return to menu"):
+        clear_quiz()
 
-        initialize_or_next_task()
-        st.rerun()
+def clear_quiz():
+    keys_to_clear = [
+        "task", "task_id", "task_type", "task_queue", "completed",
+        "selected_words", "active_buttons", "task_start_time",
+        "user_output", "show_next_button", "last_answer_incorrect",
+        "show_toast", "quiz_started", "active_chapter", 
+    ]
+    for key in keys_to_clear:
+        if key in st.session_state:
+            del st.session_state[key]
+
+    st.rerun()

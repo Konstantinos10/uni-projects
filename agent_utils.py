@@ -71,9 +71,9 @@ def get_user_data(username: str) -> dict:
         user_doc = docs[0]
         logger.info(f"Found user document: {user_doc.id}")
         
-        # Retrieve the chapter.question array field
+        # Retrieve the cleared_questions array field
         user_data = user_doc.to_dict()
-        completed_chapters = user_data.get("chapter.question", [])
+        completed_chapters = user_data.get("cleared_questions", [])
         logger.info(f"Completed chapters for {username}: {completed_chapters}")
         
         return {"username": username, "completed_chapters": completed_chapters}

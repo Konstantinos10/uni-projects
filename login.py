@@ -72,7 +72,7 @@ with tab_register:
                     "elo": 0,
                     "puzzles_played": [],
                     "unique_puzzles": [],
-                    "chapter.question": []
+                    "cleared_questions": []
                 })
 
                 st.success("Account created! Please login.")
