@@ -4,6 +4,7 @@ import logging
 from langchain_core.tools import tool
 from firebase_admin import firestore
 from code_editor import run_code as code_run #epic way to prevent recursion
+import random
 
 # Setup logging
 logger = logging.getLogger(__name__)
@@ -131,3 +132,53 @@ def explain_task(task_id: str, task_type: str) -> str:
         return f"Error: Task file for {task_type} not found."
     except Exception as e:
         return f"Error retrieving task: {str(e)}"
+
+
+@tool
+def python_videos(name: str = "Basic Concepts") -> str:
+    """
+    This will return a random python video from a specific chapter from pyvids.
+
+    Args:
+        name (str): This is the name of the chapter you will choose videos for. The options are :
+                            1. Basic Concepts
+                            2.Basic Data Types
+                            3.If-else statements
+                            4.Loops
+                            If you can't find a chapter, you will default in "Basic Concepts"
+    
+    Returns:
+        str: YouTube video URL ONLY.
+    """
+    pyvids = {
+        "Basic Concepts": [
+            "https://www.youtube.com/watch?v=hp4pYFASTrc&ab_channel=PortfolioCourses",
+            "https://www.youtube.com/watch?v=QZ6Ml_CA9PQ&ab_channel=NesoAcademy",
+            "https://www.youtube.com/watch?v=GEMZpw7ug-k&ab_channel=NesoAcademy",
+            "https://www.youtube.com/watch?v=9OeznAkyQz4&ab_channel=ProgrammingwithMosh"
+        ],
+        "Basic Data Types": [
+            "https://www.youtube.com/watch?v=LKFrQXaoSMQ&ab_channel=BroCode",
+            "https://www.youtube.com/watch?v=RSQjxL5WRNM&ab_channel=Telusko,"
+            "https://www.youtube.com/watch?v=Ctqi5Y4X-jA&ab_channel=ProgrammingwithMosh",
+            "https://www.youtube.com/watch?v=28FUVmWU_fA&ab_channel=PortfolioCourses"
+        ],
+        "If-else statements": [
+            "https://www.youtube.com/watch?v=89tgwKTo-rE&ab_channel=NesoAcademy",
+            "https://www.youtube.com/watch?v=FvMPfrgGeKs&ab_channel=BroCode",
+            "https://www.youtube.com/watch?v=cQT33yu9pY8&t=116s&ab_channel=ProgrammingwithMosh",
+            "https://www.youtube.com/watch?v=X6TcB0DNLE8&ab_channel=NesoAcademy"
+
+        ],
+        "Loops": [
+            "https://www.youtube.com/watch?v=6iF8Xb7Z3wQ&ab_channel=CoreySchafer",
+            "https://www.youtube.com/watch?v=cUV__S8Jaqs&ab_channel=NesoAcademy",
+            "https://www.youtube.com/watch?v=23vCap6iYSs&ab_channel=DaveGray",
+
+        ]
+    }
+    
+    chapter = pyvids.get(name, pyvids["Basic Concepts"])
+    ranvid = random.choice(chapter)
+    
+    return ranvid

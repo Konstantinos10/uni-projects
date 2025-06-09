@@ -8,7 +8,7 @@ from google.api_core.exceptions import ResourceExhausted
 import firebase_admin
 from firebase_admin import credentials, firestore
 from questions import chapters
-from agent_utils import get_username, get_user_data, explain_task, run_code, read_playground, write_playground
+from agent_utils import get_username, get_user_data, explain_task, run_code, read_playground, write_playground, python_videos
 
 # === Initialize Firebase ===
 if not firebase_admin._apps:
@@ -41,7 +41,7 @@ llm = ChatGoogleGenerativeAI(
     max_retries=2,
     google_api_key=api_key,
 )
-tools = [get_username, get_user_data, explain_task, run_code, read_playground, write_playground]
+tools = [get_username, get_user_data, explain_task, run_code, read_playground, write_playground, python_videos]
 model = llm.bind_tools(tools)
 
 system_message = f"""You're a helpful Python tutor agent. Answer clearly and concisely.
@@ -73,6 +73,10 @@ system_message = f"""You're a helpful Python tutor agent. Answer clearly and con
         but if the code was run and not modified, it will return the standard and error output as well. You can write to the editor with the write_playground tool
         but always read the content before writing to it. If you write to it make sure to rewrite the entire content of the editor, not just the new code.
         You should also suggest the user to use the playground and encourage them to test their code there.
+
+        When you are going to reccomend a video to the user you will take this steps.
+        1. Call the python_videos tool and get the URL from it
+        2. Return ONLY the URL at the ToolMessage without any other descriptive text.
         """
 
 # === Tool Node ===
@@ -186,10 +190,15 @@ with history_container:
                 st.write(msg.content)
         elif isinstance(msg, AIMessage):
             with st.chat_message("assistant"):
-                st.write(msg.content)
+                    st.write(msg.content)
         elif isinstance(msg, ToolMessage):
             with st.chat_message("assistant"):
-                st.write(msg.content)
+                if msg.name == "python_videos" and "youtube.com" in msg.content:
+                    st.video(msg.content)
+                else:
+                    st.write(msg.content)
+                
+                
 
 with st.form(key="question_form", clear_on_submit=True):
     user_question = st.text_area("Ask a Python question (or type 'exit' to reset):")
@@ -228,4 +237,7 @@ if submit_button and user_question:
                 elif isinstance(last_msg, ToolMessage):
                     role = "assistant"
                 with st.chat_message(role):
-                    st.write(last_msg.content)
+                     if isinstance(last_msg, ToolMessage) and last_msg.name == "python_videos" and "youtube.com" in last_msg.content:
+                         st.video(last_msg.content)
+                     else:
+                         st.write(last_msg.content)
