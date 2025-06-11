@@ -1,7 +1,6 @@
 import streamlit as st
 import time
 from utils.firebase import auth
-from utils.logger import log
 from utils.cookies.cookieManager import get_cookies, set_cookie
 from utils.encryption import encrypt_message, decrypt_message
 

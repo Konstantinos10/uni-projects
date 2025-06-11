@@ -1,13 +1,10 @@
 import streamlit as st
 import json
-import logging
 from langchain_core.tools import tool
+from langchain_core.messages import BaseMessage, AIMessage, ToolMessage, SystemMessage
 from firebase_admin import firestore
 from code_editor import run_code as code_run #epic way to prevent recursion
 import random
-
-# Setup logging
-logger = logging.getLogger(__name__)
 
 # Task files (same as in task.py)
 TASK_FILES = {
@@ -48,14 +45,6 @@ def run_code(code: str) -> dict:
     return {"stdout": output, "stderr": error}
 
 @tool
-def get_username(tool_input: dict = None) -> str:
-    """Retrieve the username from the current session."""
-    if not st.session_state.username:
-        return {"username": "username wasn't found"}
-
-    return {"username": st.session_state.username}
-
-@tool
 def get_user_data(username: str) -> dict:
     """Fetch completed chapters for the given username from Firestore."""
     try:
@@ -87,7 +76,7 @@ def explain_task(task_id: str, task_type: str) -> str:
     """Retrieve and explain a specific task based on its ID and type, including the correct answer.
     
     Args:
-        task_id (str): The ID of the task (e.g., 'fib1', 'mc1', 'co1')
+        task_id (str): The ID of the task (e.g., 'fib_ch1_e1', 'mc_ch1_e1', 'co_ch1_e1')
         task_type (str): The type of task ('fill_in_the_blank', 'multiple_choice', 'code_output')
     
     Returns:
@@ -133,9 +122,8 @@ def explain_task(task_id: str, task_type: str) -> str:
     except Exception as e:
         return f"Error retrieving task: {str(e)}"
 
-
 @tool
-def python_videos(name: str = "Basic Concepts") -> str:
+def python_videos(name: str = "Basic Concepts", subname: str = None) -> str:                                                                                                                                                                                                           
     """
     This will return a random python video from a specific chapter from pyvids.
 
@@ -146,39 +134,97 @@ def python_videos(name: str = "Basic Concepts") -> str:
                             3.If-else statements
                             4.Loops
                             If you can't find a chapter, you will default in "Basic Concepts"
+        subname (str): These are a subcategory of the chapters. If the subcategory is not found
+        a random video will be choosed.
     
     Returns:
         str: YouTube video URL ONLY.
     """
     pyvids = {
-        "Basic Concepts": [
-            "https://www.youtube.com/watch?v=hp4pYFASTrc&ab_channel=PortfolioCourses",
-            "https://www.youtube.com/watch?v=QZ6Ml_CA9PQ&ab_channel=NesoAcademy",
-            "https://www.youtube.com/watch?v=GEMZpw7ug-k&ab_channel=NesoAcademy",
-            "https://www.youtube.com/watch?v=9OeznAkyQz4&ab_channel=ProgrammingwithMosh"
-        ],
-        "Basic Data Types": [
-            "https://www.youtube.com/watch?v=LKFrQXaoSMQ&ab_channel=BroCode",
-            "https://www.youtube.com/watch?v=RSQjxL5WRNM&ab_channel=Telusko,"
-            "https://www.youtube.com/watch?v=Ctqi5Y4X-jA&ab_channel=ProgrammingwithMosh",
-            "https://www.youtube.com/watch?v=28FUVmWU_fA&ab_channel=PortfolioCourses"
-        ],
-        "If-else statements": [
-            "https://www.youtube.com/watch?v=89tgwKTo-rE&ab_channel=NesoAcademy",
-            "https://www.youtube.com/watch?v=FvMPfrgGeKs&ab_channel=BroCode",
-            "https://www.youtube.com/watch?v=cQT33yu9pY8&t=116s&ab_channel=ProgrammingwithMosh",
-            "https://www.youtube.com/watch?v=X6TcB0DNLE8&ab_channel=NesoAcademy"
+        "Basic Concepts": {
+            "Hello World": [
+                "https://www.youtube.com/watch?v=hp4pYFASTrc&ab_channel=PortfolioCourses"
+            ],
+            "Operators": [
+                "https://www.youtube.com/watch?v=GEMZpw7ug-k&ab_channel=NesoAcademy"
+            ],
+            "Comments":[
+                "https://www.youtube.com/watch?v=QZ6Ml_CA9PQ&ab_channel=NesoAcademy"
+            ],
+            "Lists":[
+                "https://www.youtube.com/watch?v=9OeznAkyQz4&ab_channel=ProgrammingwithMosh"
+            ]
+        },
+        "Basic Data Types": {
+            "Interges And Floats": [
+                "https://www.youtube.com/watch?v=77TsTM3XxmA&ab_channel=b001",
+                "https://www.youtube.com/watch?v=khKv-8q7YmY&t=195s&ab_channel=CoreySchafer"
+            ],
+            "General Variables":
+            [
+               "https://www.youtube.com/watch?v=LKFrQXaoSMQ&ab_channel=BroCode",
+               "https://www.youtube.com/watch?v=RSQjxL5WRNM&ab_channel=Telusko"
+            ],
+            "Strings": [
+                "https://www.youtube.com/watch?v=Ctqi5Y4X-jA&ab_channel=ProgrammingwithMosh"
+            ],
+            "String Concatenation": [
+                "https://www.youtube.com/watch?v=28FUVmWU_fA&ab_channel=PortfolioCourses"
+            ]
+        },
+        "If-else statements": {
+            "If": [
+                "https://www.youtube.com/watch?v=89tgwKTo-rE&ab_channel=NesoAcademy"
+            ],
+            "If/Else/Elif": [
+                "https://www.youtube.com/watch?v=X6TcB0DNLE8&ab_channel=NesoAcademy",
+                "https://www.youtube.com/watch?v=FvMPfrgGeKs&ab_channel=BroCode"
+            ]
+        },
+        "Loops": {
+            "For Loops": [
+                "https://www.youtube.com/watch?v=KWgYha0clzw&t=151s&ab_channel=BroCode",
+                "https://www.youtube.com/watch?v=zmIdC0_0BgY&ab_channel=AlexTheAnalyst"
+            ],
+            "While Loops": [
+                "https://www.youtube.com/watch?v=rRTjPnVooxE&ab_channel=BroCode",
+                "https://www.youtube.com/watch?v=S_1QiK_RF2o&ab_channel=NesoAcademy"
 
-        ],
-        "Loops": [
-            "https://www.youtube.com/watch?v=6iF8Xb7Z3wQ&ab_channel=CoreySchafer",
-            "https://www.youtube.com/watch?v=cUV__S8Jaqs&ab_channel=NesoAcademy",
-            "https://www.youtube.com/watch?v=23vCap6iYSs&ab_channel=DaveGray",
-
-        ]
+            ],
+            "Break / Continue" : [
+                "https://www.youtube.com/watch?v=Rjjgy2QWS98&ab_channel=NesoAcademy",
+                "https://www.youtube.com/watch?v=yCZBnjF4_tU&t=2s&ab_channel=Telusko"
+            ]
     }
-    
+    }
+
     chapter = pyvids.get(name, pyvids["Basic Concepts"])
-    ranvid = random.choice(chapter)
-    
+
+    if subname and subname in chapter:
+        check = chapter[subname]  
+    else:
+        check = sum(chapter.values(), [])
+
+    ranvid = random.choice(check)
+   
     return ranvid
+
+def skip_message(idx: int, messages: list[BaseMessage]) -> bool:
+    msg = messages[idx]
+
+    # keep video tool calls visible
+    if isinstance(msg, ToolMessage):
+        if getattr(msg, "name", "") == "python_videos":
+            return False
+        return True
+
+    # hide system prompts.
+    if isinstance(msg, SystemMessage):
+        return True
+
+    # hide empty/blank messages
+    if isinstance(msg, AIMessage) and not str(msg.content).strip():
+        return True
+
+    # don't hide/skip
+    return False

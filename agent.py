@@ -8,17 +8,7 @@ from google.api_core.exceptions import ResourceExhausted
 import firebase_admin
 from firebase_admin import credentials, firestore
 from questions import chapters
-from agent_utils import get_username, get_user_data, explain_task, run_code, read_playground, write_playground, python_videos
-
-# === Initialize Firebase ===
-if not firebase_admin._apps:
-    try:
-        cred = credentials.Certificate("path/to/your/firebase-adminsdk.json")  # Update with your Firebase credentials path
-        firebase_admin.initialize_app(cred)
-    except Exception as e:
-        st.error(f"Failed to initialize Firebase: {str(e)}")
-        st.stop()
-db = firestore.client()
+from agent_utils import get_user_data, explain_task, run_code, read_playground, write_playground, python_videos, skip_message
 
 # === Load API Key ===
 try:
@@ -41,13 +31,19 @@ llm = ChatGoogleGenerativeAI(
     max_retries=2,
     google_api_key=api_key,
 )
-tools = [get_username, get_user_data, explain_task, run_code, read_playground, write_playground, python_videos]
+tools = [get_user_data, explain_task, run_code, read_playground, write_playground, python_videos]
 model = llm.bind_tools(tools)
 
+if st.session_state.username:
+    username = st.session_state.username
+else:
+    username = "username wasn't found"
+
 system_message = f"""You're a helpful Python tutor agent. Answer clearly and concisely.
-        When the user asks to learn Python or start a lesson, call get_username to retrieve their username,
-        then call get_user_data to fetch their completed chapters (e.g. 1.1, 1.2). Use the following chapter information to suggest
-        appropriate topics based on completed chapters:
+        User's username is: {username}
+        You should ask the user whether they want to continue their python lessons, or learn anything related to Python.
+        When the user asks to start a lesson or continue where they left off, call get_user_data to fetch their completed chapters
+        (e.g. 1.1, 1.2). Use the following chapter information to suggest appropriate topics based on completed chapters:
 
         {chapters}
 
@@ -62,6 +58,7 @@ system_message = f"""You're a helpful Python tutor agent. Answer clearly and con
         fib - fill in the blank
         mc - multiple choice
         co - code output
+        Before revealing the answer, show everything from the task and ask the user if they want you to reveal the answer or not.
         You always have to explain why the answer you gave is the right one.
         
         If at any point you need to run code, use the run_code tool. It takes a string of python code as input and returns the
@@ -178,34 +175,32 @@ if "explain_task" in st.session_state and st.session_state.explain_task and not 
     # Clear st.session_state.explain_task to prevent re-triggering
     st.session_state.explain_task = None
 
-#elif any(isinstance(msg, HumanMessage) and f"help me with task {st.session_state.explain_task}" in msg.content.lower() for msg in st.session_state.message_history):
-    #st.session_state.explain_task = None
-    #st.toast("Answered already")
-
 # Display chat history after processing explain_task
 with history_container:
-    for msg in st.session_state.message_history:
-        if isinstance(msg, HumanMessage):
-            with st.chat_message("user"):
+    for i, msg in enumerate(st.session_state.message_history):
+
+        # check if message should be skipped
+        if skip_message(i, st.session_state.message_history):
+            continue
+
+        # show specific message
+        role = "user" if isinstance(msg, HumanMessage) else "assistant"
+        with st.chat_message(role):
+            if (
+                isinstance(msg, ToolMessage)
+                and msg.name == "python_videos"
+                and "youtube.com" in msg.content
+            ):
+                st.video(msg.content)
+            else:
                 st.write(msg.content)
-        elif isinstance(msg, AIMessage):
-            with st.chat_message("assistant"):
-                    st.write(msg.content)
-        elif isinstance(msg, ToolMessage):
-            with st.chat_message("assistant"):
-                if msg.name == "python_videos" and "youtube.com" in msg.content:
-                    st.video(msg.content)
-                else:
-                    st.write(msg.content)
-                
-                
 
 with st.form(key="question_form", clear_on_submit=True):
     user_question = st.text_area("Ask a Python question (or type 'exit' to reset):")
     submit_button = st.form_submit_button("Submit")
 
 if submit_button and user_question:
-    # For resetting the session
+    # reset the chat if "exit" or "quit" is given
     if user_question.lower() in ["exit", "quit"]:
         st.session_state.message_history = [ 
             SystemMessage(content=system_message)
@@ -223,21 +218,33 @@ if submit_button and user_question:
             "username": st.session_state.username
         }
 
+        # for each state in the graph
         for state in graph.stream(inputs, stream_mode="values"):
             st.session_state.message_history = state["messages"]
             st.session_state.number_of_steps = state["number_of_steps"]
             st.session_state.username = state["username"]
 
+            # chat container
             with history_container:
-                last_msg = state["messages"][-1]
-                if isinstance(last_msg, HumanMessage):
-                    role = "user"
-                elif isinstance(last_msg, AIMessage):
-                    role = "assistant"
-                elif isinstance(last_msg, ToolMessage):
-                    role = "assistant"
+
+                # get the last message and check if it should be skipped
+                last_idx = len(state["messages"]) - 1
+                if skip_message(last_idx, state["messages"]):
+                    continue
+
+                # show as user or assistant messaGE
+                last_msg = state["messages"][last_idx]
+                role = (
+                    "user" if isinstance(last_msg, HumanMessage) else "assistant"
+                )
+
+                # show video or simple line
                 with st.chat_message(role):
-                     if isinstance(last_msg, ToolMessage) and last_msg.name == "python_videos" and "youtube.com" in last_msg.content:
-                         st.video(last_msg.content)
-                     else:
-                         st.write(last_msg.content)
+                    if (
+                        isinstance(last_msg, ToolMessage)
+                        and last_msg.name == "python_videos"
+                        and "youtube.com" in last_msg.content
+                    ):
+                        st.video(last_msg.content)
+                    else:
+                        st.write(last_msg.content)

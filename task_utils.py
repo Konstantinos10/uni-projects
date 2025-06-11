@@ -5,8 +5,6 @@ import time
 from random import shuffle
 from firebase_admin import firestore
 
-import re
-
 db = firestore.client()
 
 # Task files
