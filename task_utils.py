@@ -132,7 +132,7 @@ def update_user_exp(points_to_add: int, puzzle_id: str = None):
         print(f"Failed to update EXP or puzzle stats: {e}")
 
 # Load and combine tasks
-def load_tasks(chapter: int | None = None):
+def load_tasks(chapter=None):
     all_tasks = []
     for task_type, file_path in TASK_FILES.items():
         with open(file_path, "r") as f:
