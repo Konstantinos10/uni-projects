@@ -54,21 +54,17 @@ def get_user_data(username: str) -> dict:
         docs = list(query)
         
         if not docs:
-            logger.warning(f"No user document found for username: {username}")
             return {"username": username, "completed_chapters": [], "error": "User document not found."}
         
         # Get the first matching document
         user_doc = docs[0]
-        logger.info(f"Found user document: {user_doc.id}")
         
         # Retrieve the cleared_questions array field
         user_data = user_doc.to_dict()
         completed_chapters = user_data.get("cleared_questions", [])
-        logger.info(f"Completed chapters for {username}: {completed_chapters}")
         
         return {"username": username, "completed_chapters": completed_chapters}
     except Exception as e:
-        logger.error(f"Error fetching user data for {username}: {str(e)}")
         return {"username": username, "completed_chapters": [], "error": f"Error fetching user data: {str(e)}"}
 
 @tool

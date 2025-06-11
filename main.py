@@ -37,7 +37,6 @@ if 'user' not in st.session_state or st.session_state.user == None:
                 time.sleep(0.5)                                             # Give time for the cookie to be set
                 st.session_state.user = user
             except Exception as e:
-                log("Couldn't get user with refresh token, going to login page: " + str(e))
                 st.session_state.user = None
 
 

@@ -232,7 +232,7 @@ if submit_button and user_question:
                 if skip_message(last_idx, state["messages"]):
                     continue
 
-                # show as user or assistant messaGE
+                # show as user or assistant message(aka decide sender icon)
                 last_msg = state["messages"][last_idx]
                 role = (
                     "user" if isinstance(last_msg, HumanMessage) else "assistant"
