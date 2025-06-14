@@ -3,7 +3,7 @@ from streamlit_ace import st_ace
 from code_editor import run_code
 
 st.header("Playground")
-st.write("This is an editor where you can write and run any Python code you want, so feel free to expiriment.\n" \
+st.write("This is an editor where you can write and run any Python code you want, so feel free to experiment.\n" \
         "You may also ask the chatbot to explain or modify the code it as you wish.")
 
 #if requested, create a new key for the editor to force it to reload(usefull in case we want to set the editor content(there's probably a better way to do this but I haven't found it yet(TODO:find one)))

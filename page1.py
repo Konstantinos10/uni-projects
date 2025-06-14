@@ -25,41 +25,33 @@ if username:
         st.session_state.username = username
         st.session_state.elo = user_data.get('elo', 0)
 
-        # Display user data
+        # Display home page content
         
-
         st.title(f"Welcome back, {username}!")
         st.write("Whether you’ve never written a line of code or you’re looking to sharpen your Python skills, this platform is built for you. Learn at your own pace, test your knowledge, and experiment freely—all in one place")
-        st.write("What You Can Do Here:")
-        st.markdown("""
-<style>
-    .stButton>button {
-        width: 100% !important;
-    }
-</style>
-""", unsafe_allow_html=True)
-        with st.expander("Learn Python One Topic At a Time👨‍🏫"):
-           st.write("Dive into structured chapters that break down Python concepts step by step. Each section teaches a key topic, where you can learn about it and test your knowledge through an exercise. When your done, you may go to the next one - or if you know it already you can always skip it and go to one more complex topic. You can always go back to sections you already done to refresh your knowledge. ")
-           if st.button("Go check the topics!"):
-                        st.switch_page("chapter_menu.py")
-        with st.expander("Challenge Yourself Through Our Quizzes✍️"):
-           st.write("Put your knowledge to the test with our chapter-based puzzles! Choose from different difficulty levels and solve coding tasks tailored to each concept you learn. After completing a quiz, you can see the points you gained and you can do it again to increase them. The more you practice, the sharper your skills become!")
-           if st.button("Go check the quizzes!"):
-                        st.switch_page("task.py")
-        with st.expander("Code Freely In Our Playground Editor👨‍💻"):
-           st.write("Experiment freely in our interactive code editor - your personal sandbox for Python exploration! Write code, test ideas, and see instant results without any restrictions.")
-           if st.button("Go check the playground!"):
-                        st.switch_page("playground.py")
-        with st.expander("Get Instant Help From Our ChatBot🤖"):
-           st.write("Stuck on a quiz question? Need help with playground code? Our AI assistant is here for you 24/7. It can explain tricky concepts, recommend helpful Python tutorials, and even debug your code - making it the perfect learning companion for every step of your coding journey.")
-           if st.button("Go check the agent!"):
-                        st.switch_page("agent.py")
+        
+        with st.expander("Learn Python One Topic At a Time", icon="👨‍🏫"):
+            st.write("Dive into structured chapters that break down Python concepts step by step. Each section teaches a key topic, where you can learn about it and test your knowledge through an exercise. When your done, you may go to the next one - or if you know it already you can always skip it and go to one more complex topic. You can always go back to sections you already done to refresh your knowledge. ")
+            if st.button("Go check the topics!", use_container_width=True):
+                st.switch_page("chapter_menu.py")
+        with st.expander("Challenge Yourself Through Our Quizzes", icon="✍️"):
+            st.write("Put your knowledge to the test with our chapter-based puzzles! Choose from different difficulty levels and solve coding tasks tailored to each concept you learn. After completing a quiz, you can see the points you gained and you can do it again to increase them. The more you practice, the sharper your skills become!")
+            if st.button("Go check the quizzes!", use_container_width=True):
+                st.switch_page("task.py")
+        with st.expander("Code Freely In Our Playground Editor", icon="👨‍💻"):
+            st.write("Experiment freely in our interactive code editor - your personal sandbox for Python exploration! Write code, test ideas, and see instant results without any restrictions.")
+            if st.button("Go check the playground!", use_container_width=True):
+                st.switch_page("playground.py")
+        with st.expander("Get Instant Help From Our ChatBot", icon="🤖"):
+            st.write("Stuck on a quiz question? Need help with playground code? Our AI assistant is here for you 24/7. It can explain tricky concepts, recommend helpful Python tutorials, and even debug your code - making it the perfect learning companion for every step of your coding journey.")
+            if st.button("Go check the agent!", use_container_width=True):
+                st.switch_page("agent.py")
     except Exception as e:
         st.error(f"Error loading user data: {e}")
 else:
     st.error("Error decrypting username. Please log in again.")
 
-if st.button("Logout"):
+if st.button("Logout", use_container_width=True):
     # Clear session state
     st.session_state.user = None
     st.session_state.cookies = None

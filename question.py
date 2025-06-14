@@ -28,9 +28,10 @@ def load_chapter_question():
     if st.session_state.current_chapter == None: raise ValueError("current_chapter is not set. Please set it before loading a question.")
     if st.session_state.current_question == None: raise ValueError("current_question is not set. Please set it before loading a question.")
     if st.session_state.max_question == None: raise ValueError("max_question is not set. Please set it before loading a question.")
+    if 'difficulty' not in st.session_state: st.session_state.difficulty = 1  # default to medium difficulty if not set
 
     #setup navigation buttons
-    colA, colB, _ = st.columns([0.2, 0.2, 0.6])
+    colA, colB, _, colD = st.columns([0.2, 0.2, 0.3, 0.3])
 
     with colA:
         # Menu button
@@ -60,8 +61,23 @@ def load_chapter_question():
                 reset_question_state() # reset question related variables before loading a new question
                 st.rerun() # rerun the app to update button states
 
+        # Difficulty selector
+        with colD:
+            options = ["Begginer", "Normal", "Programmer"]
+            st.selectbox(
+                "Learning Mode",
+                options=options,
+                index=st.session_state.difficulty,
+                key="difficulty_option",
+                on_change=reset_question_state, # reset question related variables when the difficulty is changed
+            )
+            if st.session_state.difficulty != options.index(st.session_state.difficulty_option):  # check if the difficulty has changed
+                st.session_state.difficulty = options.index(st.session_state.difficulty_option)
+                reset_question_state()
+                st.rerun()  # rerun the app to update the question data
+            
     # get chapter/question data from question.py
-    get_question_data(st.session_state.current_chapter, st.session_state.current_question)
+    get_question_data(st.session_state.current_chapter, st.session_state.current_question, st.session_state.difficulty)
 
     st.divider()
 
