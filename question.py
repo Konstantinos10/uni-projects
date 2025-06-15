@@ -109,6 +109,12 @@ def load_chapter_question():
         # get the question key(ex. "2.3")
         completed_question = float(str(st.session_state.current_chapter) +"."+ str(st.session_state.current_question))
 
+        
+        # show a simple info message if the question has been cleared before
+        if completed_question in st.session_state.cleared_questions:
+            st.info("Correct!")
+            return
+        
         # timer logic to decide posible difficulty changes
         if 'timer_queue' not in st.session_state: st.session_state.timer_queue = []
     
@@ -138,12 +144,6 @@ def load_chapter_question():
                 st.session_state.difficulty_new = 1
 
 
-        
-        # show a simple info message if the question has been cleared before
-        if completed_question in st.session_state.cleared_questions:
-            st.info("Correct!")
-            return
-        
         # update the database and show a success message if the question is cleared for the first time
         try:
             # add cleared question to the database
