@@ -537,7 +537,7 @@ def q_1_1_e():
     st.write("Let's make the computer say something! Type `print(\"Hello World!\")`the code to say Hello World!")
     st.write("In Python, we use the `print()` command to make the computer show something on the screen. We just need to put our message in quotes like `\"this\"`.")
     st.session_state.editor_content = ""
-    answer = " Hello World!"
+    answer = "Hello World!"
     evaluate_answer(answer)
 
 def q_1_2_e():

@@ -27,7 +27,7 @@ if username:
 
         # Display home page content
         
-        st.title(f"Welcome back, {username}!")
+        st.title(f"Welcome, {username}!")
         st.write("Whether you’ve never written a line of code or you’re looking to sharpen your Python skills, this platform is built for you. Learn at your own pace, test your knowledge, and experiment freely—all in one place")
         
         with st.expander("Learn Python One Topic At a Time", icon="👨‍🏫"):
@@ -53,9 +53,7 @@ else:
 
 if st.button("Logout", use_container_width=True):
     # Clear session state
-    st.session_state.user = None
-    st.session_state.cookies = None
-    st.session_state.user_token = None
+    st.session_state.clear()
 
     # Clear cookies
     delete_cookie("user_token")

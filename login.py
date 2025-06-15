@@ -69,7 +69,7 @@ with tab_register:
                     "username": new_username,
                     "date_created": datetime.utcnow(),
                     "exp": 0,
-                    "elo": 0,
+                    "elo": 1200,
                     "puzzles_played": [],
                     "unique_puzzles": [],
                     "cleared_questions": []
