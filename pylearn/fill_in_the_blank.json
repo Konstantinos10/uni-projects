@@ -1,0 +1,246 @@
+[
+  { "id": "fib_ch1_e1", "type": "fill_in_blank", "chapter": 1,
+    "question_template": "greeting = \"Hi\"\nname = \"Bob\"\nprint(greeting + \" \" + ___)",
+    "correct_sequence": ["name"],
+    "options": ["name", "greeting", "Bob", "\"name\""],
+    "description": "Fill variable to print greeting.", "points": 100,
+    "difficulty": "easy", "elo": 1200 },
+
+  { "id": "fib_ch1_e2", "type": "fill_in_blank", "chapter": 1,
+    "question_template": "value = 5\nprint(___(value))",
+    "correct_sequence": ["str"],
+    "options": ["str", "int", "len", "float"],
+    "description": "Convert int to string.", "points": 110,
+    "difficulty": "easy", "elo": 1200 },
+
+  { "id": "fib_ch1_e3", "type": "fill_in_blank", "chapter": 1,
+    "question_template": "nums = [1,2,3]\nprint(len(___))",
+    "correct_sequence": ["nums"],
+    "options": ["nums", "[1,2,3]", "len", "3"],
+    "description": "Pass list to len().", "points": 120,
+    "difficulty": "easy", "elo": 1200 },
+
+  
+  { "id": "fib_ch1_m1", "type": "fill_in_blank", "chapter": 1,
+    "question_template": "result = 9 // ___\nprint(result)",
+    "correct_sequence": ["2"],
+    "options": ["2", "3", "4", "0"],
+    "description": "Floor-division operator.", "points": 150,
+    "difficulty": "medium", "elo": 1500 },
+
+  { "id": "fib_ch1_m2", "type": "fill_in_blank", "chapter": 1,
+    "question_template": "animal = \"Cat\"\nprint(animal.lower().___())",
+    "correct_sequence": ["capitalize"],
+    "options": ["capitalize", "upper", "title", "lower"],
+    "description": "Chain string methods.", "points": 160,
+    "difficulty": "medium", "elo": 1500 },
+
+  { "id": "fib_ch1_m3", "type": "fill_in_blank", "chapter": 1,
+    "question_template": "x,y=3,4\nprint((x**2+y**2)**0.5==___)",
+    "correct_sequence": ["5"],
+    "options": ["5", "7", "25", "2"],
+    "description": "Recognise Pythagorean triple.", "points": 170,
+    "difficulty": "medium", "elo": 1500 },
+
+
+  { "id": "fib_ch1_h1", "type": "fill_in_blank", "chapter": 1,
+    "question_template": "phrase=\"python\"\nprint(phrase[::-___])",
+    "correct_sequence": ["1"],
+    "options": ["1", "-1", "2", "len"],
+    "description": "Reverse with slicing step.", "points": 200,
+    "difficulty": "hard", "elo": 1800 },
+
+  { "id": "fib_ch1_h2", "type": "fill_in_blank", "chapter": 1,
+    "question_template": "nums=[2,4,6]\nnums.append(___)\nprint(len(nums))",
+    "correct_sequence": ["8"],
+    "options": ["8", "nums", "None", "4"],
+    "description": "Append item then len().", "points": 210,
+    "difficulty": "hard", "elo": 1800 },
+
+  { "id": "fib_ch1_h3", "type": "fill_in_blank", "chapter": 1,
+    "question_template": "value=7\nprint(bin(value).___('0b'))",
+    "correct_sequence": ["lstrip"],
+    "options": ["lstrip", "strip", "replace", "split"],
+    "description": "Strip '0b' prefix.", "points": 220,
+    "difficulty": "hard", "elo": 1800 },
+
+
+  { "id": "fib_ch2_e1", "type": "fill_in_blank", "chapter": 2,
+    "question_template": "number=3.14\nwhole=___(number)\nprint(whole)",
+    "correct_sequence": ["int"],
+    "options": ["int", "float", "str", "round"],
+    "description": "Float int cast.", "points": 100,
+    "difficulty": "easy", "elo": 1200 },
+
+  { "id": "fib_ch2_e2", "type": "fill_in_blank", "chapter": 2,
+    "question_template": "text=\"42\"\nprint(___(text))",
+    "correct_sequence": ["int"],
+    "options": ["int", "str", "float", "bool"],
+    "description": "String int cast.", "points": 110,
+    "difficulty": "easy", "elo": 1200 },
+
+  { "id": "fib_ch2_e3", "type": "fill_in_blank", "chapter": 2,
+    "question_template": "value=7\nprint(___(value))",
+    "correct_sequence": ["str"],
+    "options": ["str", "repr", "format", "int"],
+    "description": "Convert the integer to string.", "points": 120,
+    "difficulty": "easy", "elo": 1200 },
+
+  
+  { "id": "fib_ch2_m1", "type": "fill_in_blank", "chapter": 2,
+    "question_template": "nums=[1,2,3]\nprint(___(nums))",
+    "correct_sequence": ["len"],
+    "options": ["len", "sum", "max", "min"],
+    "description": "Length of list.", "points": 150,
+    "difficulty": "medium", "elo": 1500 },
+
+  { "id": "fib_ch2_m2", "type": "fill_in_blank", "chapter": 2,
+    "question_template": "txt=\"hello\"\nprint(txt.___())",
+    "correct_sequence": ["capitalize"],
+    "options": ["capitalize", "upper", "title", "lower"],
+    "description": "Capitalize string.", "points": 160,
+    "difficulty": "medium", "elo": 1500 },
+
+  { "id": "fib_ch2_m3", "type": "fill_in_blank", "chapter": 2,
+    "question_template": "val=5.6789\nprint(round(val,___))",
+    "correct_sequence": ["2"],
+    "options": ["2", "1", "0", "3"],
+    "description": "Round to 2 decimals.", "points": 170,
+    "difficulty": "medium", "elo": 1500 },
+
+
+  { "id": "fib_ch2_h1", "type": "fill_in_blank", "chapter": 2,
+    "question_template": "text=\"banana\"\nprint(text.count(___))",
+    "correct_sequence": ["'a'"],
+    "options": ["'a'", "'b'", "'n'", "'an'"],
+    "description": "Count 'a' occurrences.", "points": 200,
+    "difficulty": "hard", "elo": 1800 },
+
+  { "id": "fib_ch2_h2", "type": "fill_in_blank", "chapter": 2,
+    "question_template": "nums=[3,1,4]\nprint(sorted(nums,reverse=___)[0])",
+    "correct_sequence": ["True"],
+    "options": ["True", "False", "None", "'True'"],
+    "description": "Sort desc then max.", "points": 210,
+    "difficulty": "hard", "elo": 1800 },
+
+  { "id": "fib_ch2_h3", "type": "fill_in_blank", "chapter": 2,
+    "question_template": "bits=0b1111\nprint(bits & ___)",
+    "correct_sequence": ["0b11"],
+    "options": ["0b11", "0b1", "0b10", "0b111"],
+    "description": "Bit-mask two LSBs.", "points": 220,
+    "difficulty": "hard", "elo": 1800 },
+
+  
+  { "id":"fib_ch3_e1","type":"fill_in_blank","chapter":3,
+    "question_template":"age = 20\nif age >= ___:\n    print(\"adult\")",
+    "correct_sequence":["18"],
+    "options":["18","21","adult","0"],
+    "description":"Print 'adult' if above adult age ","points":100,"difficulty":"easy","elo":1200 },
+
+  { "id":"fib_ch3_e2","type":"fill_in_blank","chapter":3,
+    "question_template":"flag = True\nif flag:\n    print(___)",
+    "correct_sequence":["\"on\""],
+    "options":["\"on\"","\"off\"","flag","True"],
+    "description":"Print literal when flag true.","points":110,"difficulty":"easy","elo":1200 },
+
+  { "id":"fib_ch3_e3","type":"fill_in_blank","chapter":3,
+    "question_template":"print(5 > 3 ___ 4 < 2)",
+    "correct_sequence":["and"],
+    "options":["and","or","not","=="],
+    "description":"Insert logical operator.","points":120,"difficulty":"easy","elo":1200 },
+
+
+  { "id":"fib_ch3_m1","type":"fill_in_blank","chapter":3,
+    "question_template":"x = 7\nif x % 2 == 0:\n    print(\"even\")\n___:\n    print(\"odd\")",
+    "correct_sequence":["else"],
+    "options":["else","elif","pass","break"],
+    "description":"Complete if/else.","points":150,"difficulty":"medium","elo":1500 },
+
+  { "id":"fib_ch3_m2","type":"fill_in_blank","chapter":3,
+    "question_template":"temp = 30\nif temp > 25 and temp < ___:\n    print(\"warm\")",
+    "correct_sequence":["35"],
+    "options":["35","25","30","40"],
+    "description":"Upper bound check.","points":160,"difficulty":"medium","elo":1500 },
+
+  { "id":"fib_ch3_m3","type":"fill_in_blank","chapter":3,
+    "question_template":"score = 85\ngrade = 'A' if score >= 90 ___ 'B'\nprint(grade)",
+    "correct_sequence":["else"],
+    "options":["else","if","elif","and"],
+    "description":"Fill ternary operator.","points":170,"difficulty":"medium","elo":1500 },
+
+
+  { "id":"fib_ch3_h1","type":"fill_in_blank","chapter":3,
+    "question_template":"x = 3\ny = 5\nif x < y < ___:\n    print('chain')",
+    "correct_sequence":["10"],
+    "options":["10","5","3","7"],
+    "description":"Chained comparison upper limit.","points":200,"difficulty":"hard","elo":1800 },
+
+  { "id":"fib_ch3_h2","type":"fill_in_blank","chapter":3,
+    "question_template":"year = 1900\nis_leap = (year%4==0 and year%100!=0) or year%___==0\nprint(is_leap)",
+    "correct_sequence":["400"],
+    "options":["400","100","4","1900"],
+    "description":"Complete leap-year rule.","points":210,"difficulty":"hard","elo":1800 },
+
+  { "id":"fib_ch3_h3","type":"fill_in_blank","chapter":3,
+    "question_template":"val = -2\nif val > 0:\n    print('pos')\nelif val == 0:\n    print('zero')\n___:\n    print('neg')",
+    "correct_sequence":["else"],
+    "options":["else","elif","pass","continue"],
+    "description":"Finish multi-branch.","points":220,"difficulty":"hard","elo":1800 },
+
+
+  { "id":"fib_ch4_e1","type":"fill_in_blank","chapter":4,
+    "question_template":"for i in range(___):\n    print(i)",
+    "correct_sequence":["3"],
+    "options":["3","2","5","1"],
+    "description":"Loop three times.","points":100,"difficulty":"easy","elo":1200 },
+
+  { "id":"fib_ch4_e2","type":"fill_in_blank","chapter":4,
+    "question_template":"total = 0\nfor n in [1,2,3]:\n    total += n\nprint(___)",
+    "correct_sequence":["total"],
+    "options":["total","n","sum","len"],
+    "description":"Print accumulator.","points":110,"difficulty":"easy","elo":1200 },
+
+  { "id":"fib_ch4_e3","type":"fill_in_blank","chapter":4,
+    "question_template":"i = 0\nwhile i < 3:\n    i += 1\nprint(i ___ 1)",
+    "correct_sequence":["+"],
+    "options":["+","-","*","/"],
+    "description":"Add inside print.","points":120,"difficulty":"easy","elo":1200 },
+
+
+  { "id":"fib_ch4_m1","type":"fill_in_blank","chapter":4,
+    "question_template":"for ch in 'abc':\n    print(ch.___(), end=' ')",
+    "correct_sequence":["upper"],
+    "options":["upper","lower","capitalize","title"],
+    "description":"Call string method inside loop.","points":150,"difficulty":"medium","elo":1500 },
+
+  { "id":"fib_ch4_m2","type":"fill_in_blank","chapter":4,
+    "question_template":"nums = [1,2,3,4]\nfor i, n in ___(nums):\n    print(i, n)",
+    "correct_sequence":["enumerate"],
+    "options":["enumerate","range","list","zip"],
+    "description":"Iterate with indices.","points":160,"difficulty":"medium","elo":1500 },
+
+  { "id":"fib_ch4_m3","type":"fill_in_blank","chapter":4,
+    "question_template":"sum_even = 0\nfor n in range(1,6):\n    if n % 2 == 0:\n        sum_even += n\nprint(___)",
+    "correct_sequence":["sum_even"],
+    "options":["sum_even","n","6","range"],
+    "description":"Print final sum.","points":170,"difficulty":"medium","elo":1500 },
+    
+
+  { "id":"fib_ch4_h1","type":"fill_in_blank","chapter":4,
+    "question_template":"for n in range(1,11):\n    if n % 3 == 0:\n        ___\n    print(n)",
+    "correct_sequence":["continue"],
+    "options":["continue","break","pass","return"],
+    "description":"Skip multiples of 3.","points":200,"difficulty":"hard","elo":1800 },
+
+  { "id":"fib_ch4_h2","type":"fill_in_blank","chapter":4,
+    "question_template":"product = 1\nn = 5\nwhile n > 0:\n    product *= n\n    n -= 1\nprint(___)",
+    "correct_sequence":["product"],
+    "options":["product","n","5","'*'"],
+    "description":"Output factorial result.","points":210,"difficulty":"hard","elo":1800 },
+
+  { "id":"fib_ch4_h3","type":"fill_in_blank","chapter":4,
+    "question_template":"for i in range(1,4):\n    for j in range(1,4):\n        if i == j:\n            print(i * j, end=' ')\n# fill the range upper limit above",
+    "correct_sequence":["4"],
+    "options":["4","3","5","2"],
+    "description":"Adjust inner loop limit.","points":220,"difficulty":"hard","elo":1800 }
+]

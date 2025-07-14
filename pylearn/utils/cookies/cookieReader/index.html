@@ -1,0 +1,71 @@
+<html>
+  <body>
+    <!-- Set up your HTML here -->
+
+    <script>
+      // ----------------------------------------------------
+      // Just copy/paste these functions as-is:
+
+      function sendMessageToStreamlitClient(type, data) {
+        var outData = Object.assign({
+          isStreamlitMessage: true,
+          type: type,
+        }, data);
+        window.parent.postMessage(outData, "*");
+      }
+
+      function init() {
+        sendMessageToStreamlitClient("streamlit:componentReady", {apiVersion: 1});
+      }
+
+      function setFrameHeight(height) {
+        sendMessageToStreamlitClient("streamlit:setFrameHeight", {height: height});
+      }
+
+      // The `data` argument can be any JSON-serializable value.
+      function sendDataToPython(data) {
+        sendMessageToStreamlitClient("streamlit:setComponentValue", data);
+      }
+
+      // ----------------------------------------------------
+      // Now modify this part of the code to fit your needs:
+
+      // data is any JSON-serializable value you sent from Python,
+      // and it's already deserialized for you.
+
+      var flag = false; // Flag to prevent multiple calls
+
+      function onDataFromPython(event) {
+        if (event.data.type !== "streamlit:render") return; //I'm too scared to change this line
+
+        if (flag) return; // Prevent multiple calls
+        flag = true; // Set the flag to true to prevent further calls
+        
+        // create a dictionary of cookies to send to Python
+        var cookies = document.cookie.split("; ");
+        var cookieDict = {};
+        for (var i = 0; i < cookies.length; i++) {
+          var cookie = cookies[i].split("=");
+          var key = cookie[0];
+          var value = cookie.slice(1).join("="); // in case value contains '='
+          cookieDict[key] = decodeURIComponent(value);
+        }
+        
+        // send cookies to Python
+        sendDataToPython({
+          value: cookieDict,
+          dataType: "json",
+        });
+      }
+
+
+      // Hook things up!
+      window.addEventListener("message", onDataFromPython);
+      init();
+
+      // Optionally, if the automatic height computation fails you, give this component a height manually
+      // by commenting out below:
+      setFrameHeight(0);
+    </script>
+  </body>
+</html>
