@@ -1,6 +1,6 @@
 # Uni Projects
 
-This repository is a collection of various projects I worked on during my time in university, grouped together for convenience and to avoid cluttering my GitHub profile.
+This repository is a collection of various projects I worked on during my time in university, grouped together for convenience and to avoid cluttering my GitHub profile. The only exception to this is my Bachelor's dissertation project which can be found [here](https://github.com/Konstantinos10/BuzzerTriviaApp)
 
 Projects that were already in separate repositories were added using `git subtree`, others were added directly as standalone folders.
 
